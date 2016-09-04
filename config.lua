@@ -7,12 +7,9 @@ application =
 {
 	content =
 	{
-
-		graphicsCompatibility = 1;
-
-		width = 320,
-		height = 480, 
-		scale = "zoomStretch",
+		width = 720,
+		height = 1280, 
+		scale = "letterbox",
 		fps = 30,
 		
 		--[[
