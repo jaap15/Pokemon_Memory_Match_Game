@@ -13,6 +13,62 @@ local function startButtonEvent(event)
 	end
 end
 
+local function drawMenu(event)
+
+    -- Define local variables
+    local sysOr = system.orientation
+
+    if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then  
+        -- Changing Object Position
+        titleImage.x = display.contentCenterX
+        titleImage.y = display.contentCenterY-(display.contentCenterY/1.3)
+        title.x = display.contentCenterX
+        title.y = display.contentCenterY-(display.contentCenterY/1.75)
+        authors.x = display.contentCenterX
+        authors.y = display.contentCenterY+(display.contentCenterY/1.2)
+        startButton.x = display.contentCenterX
+        startButton.y = display.contentCenterY+(display.contentCenterY/1.5)
+
+        backgroundImage.x = display.contentCenterX
+        backgroundImage.y = display.contentCenterY
+        backgroundImage.width = display.pixelWidth
+        backgroundImage.height = display.pixelHeight
+
+        -- Changing Object Orientation
+        backgroundImage.rotation = 0
+        titleImage.rotation = 0
+        title.rotation = 0
+        authors.rotation = 0
+        startButton.rotation = 0    
+
+        startButton.x = display.contentCenterX
+        startButton.y = display.contentCenterY+(display.contentCenterY/1.5) 
+    elseif (sysOr == "landscapeRight" or sysOr == "landscapeLeft") then
+        -- Changing Object Position
+        titleImage.x = display.contentCenterX
+        titleImage.y = display.contentCenterY-(display.contentCenterY/1.3)
+        title.x = display.contentCenterX
+        title.y = display.contentCenterY-(display.contentCenterY/2.0)
+        authors.x = display.contentCenterX
+        authors.y = display.contentCenterY+(display.contentCenterY/1.15)
+        startButton.x = display.contentCenterX
+        startButton.y = display.contentCenterY+(display.contentCenterY/1.5)
+        
+        backgroundImage.x = display.contentCenterX
+        backgroundImage.y = display.contentCenterY
+        backgroundImage.width = display.pixelHeight
+        backgroundImage.height = display.pixelWidth
+
+        -- Changing Object Orientation
+        backgroundImage.rotation = 0
+        titleImage.rotation = 0
+        title.rotation = 0
+        authors.rotation = 0
+        startButton.rotation = 0        
+    end
+end
+
+
 -- -----------------------------------------------------------------------------------
 -- General Scene Functions
 -- -----------------------------------------------------------------------------------
@@ -22,42 +78,43 @@ function scene:create( event )
 
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
-    local themeStartMp3 = audio.loadStream("audio/Pokemon_Red_Blue_Opening_Theme_Music.mp3")
-    audio.play(themeStartMp3)
+    --local themeStartMp3 = audio.loadStream("audio/Pokemon_Red_Blue_Opening_Theme_Music.mp3")
+    --audio.play(themeStartMp3)
+    sceneGroup = self.view
 
-    local backgroundImage = display.newImage("images/backdrop.jpg", display.contentCenterX, display.contentCenterY)
-	backgroundImage.width = display.pixelWidth
-	backgroundImage.height = display.pixelHeight
+    -- Objects to be added to the scene
+    backgroundImage = display.newImage("images/backdrop.jpg", display.contentCenterX, display.contentCenterY)
+    titleImage = display.newImage("images/Pokemon_logo.png", display.contentCenterX, display.contentCenterY-(display.contentCenterY/1.3))
+    title = display.newText("Match Game", display.contentCenterX, display.contentCenterY-(display.contentCenterY/1.75))
+    authors = display.newText("by Daniel and Jairo", display.contentCenterX, display.contentCenterY+(display.contentCenterY/1.2))
+    startButton = widget.newButton({    
+            id = "startButton",
+            label = "Start",    
+            width = 250,
+            height = 80,
+            fontSize = 60,
+            defaultFile = "images/button.png",
+            onEvent = startButtonEvent 
+        } )     
 
-	print(display.pixelWidth)
-	print(display.pixelHeight)
-	sceneGroup:insert( backgroundImage )  
 
-
-    local titleImage = display.newImage("images/Pokemon_logo.png", display.contentCenterX, display.contentCenterY-(display.contentCenterY/1.3))
+    -- Definitions common to all orientations
+    backgroundImage.width = display.pixelWidth
+    backgroundImage.height = display.pixelHeight
+    
     titleImage.xScale = 3
     titleImage.yScale = 3
-    sceneGroup:insert( titleImage ) 	
 
-    local title = display.newText("Match Game", display.contentCenterX, display.contentCenterY-(display.contentCenterY/1.75))
     title:setFillColor(255,250,0)
-    sceneGroup:insert( title )
 
-    local authors = display.newText("by Daniel and Jairo", display.contentCenterX, display.contentCenterY+(display.contentCenterY/1.2))
-	sceneGroup:insert( authors )
+    drawMenu()
 
-	local startButton = widget.newButton({	
-		id = "startButton",
-		label = "Start",
-		width = 250,
-		height = 80,
-		fontSize = 60,
-		defaultFile = "images/button.png",
-		onEvent = startButtonEvent 
-	} )	
-	startButton.x = display.contentCenterX
-	startButton.y = display.contentCenterY+(display.contentCenterY/1.5)
-	sceneGroup:insert(startButton)
+    -- Adding all objects to scene
+    sceneGroup:insert( backgroundImage ) 
+    sceneGroup:insert( title )      
+    sceneGroup:insert( titleImage )
+    sceneGroup:insert( authors )
+    sceneGroup:insert(startButton)  
 
 
 end
@@ -74,6 +131,7 @@ function scene:show( event )
 
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
+        Runtime:addEventListener("orientation", drawMenu)
 
     end
 end

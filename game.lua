@@ -27,8 +27,8 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
 
-    local themeBattleMp3 = audio.loadStream("audio/Pokemon_Red_Battle_Music.mp3")
-    audio.play(themeBattleMp3)
+    --local themeBattleMp3 = audio.loadStream("audio/Pokemon_Red_Battle_Music.mp3")
+    --audio.play(themeBattleMp3)
 
 
 display.setStatusBar(display.HiddenStatusBar);
@@ -169,6 +169,7 @@ function scene:show( event )
 
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
+        Runtime.addEventListener("orientation", drawGame)
 
     end
 end

@@ -10,8 +10,8 @@ settings =
 		-- Supported values for orientation:
 		-- portrait, portraitUpsideDown, landscapeLeft, landscapeRight
 
-		default = "portrait",
-		supported = { "portrait", },
+		default = "landscapeLeft",
+		supported = { "portrait", "landscapeRight", "portraitUpsideDown", "landscapeLeft"},
 	},
 	
 	excludeFiles =
