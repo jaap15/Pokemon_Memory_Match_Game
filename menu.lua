@@ -8,6 +8,7 @@ local widget = require("widget")
 -- -----------------------------------------------------------------------------------
 local function startButtonEvent(event)
 	if ("ended" == event.phase) then
+        audio.fadeOut(themeStartMp3)
 		composer.gotoScene("game")
 	end
 end
@@ -19,10 +20,11 @@ end
 -- create()
 function scene:create( event )
 
-    local themeStartMp3 = audio.loadStream("audio/Pokemon_Red_Blue_Opening_Theme_Music.mp3")
-    audio.play(themeStartMp3)
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
+    local themeStartMp3 = audio.loadStream("audio/Pokemon_Red_Blue_Opening_Theme_Music.mp3")
+    audio.play(themeStartMp3)
+
     local backgroundImage = display.newImage("images/backdrop.jpg", display.contentCenterX, display.contentCenterY)
 	backgroundImage.width = display.pixelWidth
 	backgroundImage.height = display.pixelHeight
