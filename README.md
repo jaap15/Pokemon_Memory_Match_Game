@@ -16,3 +16,4 @@ Memory match game for cs371 in LUA
 # Exit / Restart Button
 # Cycles through all 150 starter pokemon, adjusting sizes so they fit behind pokeballs
 # Highscore system, local at first (based on time or move count?)
+# Add mute button for audio for both start menu and during game play
