@@ -23,7 +23,7 @@ function scene:create( event )
     audio.play(themeStartMp3)
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
-    local backgroundImage = display.newImage("/images/backdrop.jpg", display.contentCenterX, display.contentCenterY)
+    local backgroundImage = display.newImage("images/backdrop.jpg", display.contentCenterX, display.contentCenterY)
 	backgroundImage.width = display.pixelWidth
 	backgroundImage.height = display.pixelHeight
 
@@ -32,7 +32,7 @@ function scene:create( event )
 	sceneGroup:insert( backgroundImage )  
 
 
-    local titleImage = display.newImage("/images/Pokemon_logo.png", display.contentCenterX, display.contentCenterY-(display.contentCenterY/1.3))
+    local titleImage = display.newImage("images/Pokemon_logo.png", display.contentCenterX, display.contentCenterY-(display.contentCenterY/1.3))
     titleImage.xScale = 3
     titleImage.yScale = 3
     sceneGroup:insert( titleImage ) 	
@@ -50,7 +50,7 @@ function scene:create( event )
 		width = 250,
 		height = 80,
 		fontSize = 60,
-		defaultFile = "/images/button.png",
+		defaultFile = "images/button.png",
 		onEvent = startButtonEvent 
 	} )	
 	startButton.x = display.contentCenterX

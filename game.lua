@@ -49,7 +49,7 @@ local quitButton = widget.newButton({
         width = 250,
         height = 80,
         fontSize = 60,
-        defaultFile = "/images/button.png",
+        defaultFile = "images/button.png",
         onEvent = QuitButtonEvent 
     } ) 
     quitButton.x = display.contentCenterX
