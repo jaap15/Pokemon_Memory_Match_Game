@@ -9,13 +9,22 @@ local widget = require("widget")
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
 
-local function PlayButtonEvent(event)
+local function QuitButtonEvent(event)
     if ("ended" == event.phase) then
         composer.gotoScene("menu")
     end
+end    
+
+local function drawGame(event)    
+    local sysOr = system.orientation
+    if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then          
+        quitButton.x = display.contentCenterX
+        quitButton.y = display.contentCenterY+(display.contentCenterY/1.5)
+    elseif (sysOr == "landscapeRight" or sysOr == "landscapeLeft") then
+        quitButton.x = display.contentCenterX+(display.contentCenterX/1.5)
+        quitButton.y = display.contentCenterY+(display.contentCenterY/1.5)
+    end
 end
-
-
 
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
@@ -24,20 +33,17 @@ end
 -- create()
 function scene:create( event )
 
-    local sceneGroup = self.view
+    sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
 
-    --local themeBattleMp3 = audio.loadStream("audio/Pokemon_Red_Battle_Music.mp3")
-    --audio.play(themeBattleMp3)
+    local themeBattleMp3 = audio.loadStream("audio/Pokemon_Red_Battle_Music.mp3")
+    audio.play(themeBattleMp3)
 
 
 display.setStatusBar(display.HiddenStatusBar);
 
 _W = display.contentWidth;
 _H = display.contentHeight;
-
-print(_W)
-print(_H)
 
 local totalButtons = 0
 
@@ -46,7 +52,7 @@ local checkForMatch = false
 
 x = -20
 
-local quitButton = widget.newButton({   
+quitButton = widget.newButton({   
         id = "quitButton",
         label = "Quit",
         width = 250,
@@ -59,23 +65,26 @@ local quitButton = widget.newButton({
     quitButton.y = display.contentCenterY+(display.contentCenterY/1.5)
     sceneGroup:insert(quitButton)
 
-local button = {}    
-local buttonCover = {}    
-local buttonImages = {1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8}
+local sceneGroup = self.view
+button = {}    
+buttonCover = {}    
+buttonImages = {1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8}
 
 local lastButton = display.newImage("images/Pokeball.png")
 lastButton.myName = 1
-
+sceneGroup:insert( lastButton )
 
 --Set up simple off-white background
 local myRectangle = display.newRect(0, 0, _W, _H)
 myRectangle:setFillColor(0, 0, 0)
+sceneGroup:insert( myRectangle )
 
 --Notify player if match is found or not
 local matchText = display.newText(" ", 0, 0, native.systemFont)
 matchText:setTextColor(235, 235, 235)
 matchText.x = display.contentCenterX
 matchText.y = display.contentCenterY-(display.contentCenterY*0.88)
+sceneGroup:insert( matchText )
 
 --Set up game function
 function game(object, event)
@@ -118,24 +127,23 @@ function game(object, event)
     end
 end
 
-
 --Place buttons on screen
 for count = 1,4 do -- Number of Columns
-    x = x + display.contentWidth/5
+    x = x + display.contentWidth/5  
     y = 20
      
     for insideCount = 1,4 do -- Number of Rows
-        y = y + display.contentHeight/8
-         
+        y = y + display.contentHeight/9.0
         --Assign each image a random location on grid
         temp = math.random(1,#buttonImages)
-        button[count] = display.newImage("images/" .. buttonImages[temp] .. ".ico");             
-        --Position the button
+        button[count] = display.newImage("images/" .. buttonImages[temp] .. ".ico");     
+        sceneGroup:insert( button[count] ) 
+        --Position the button   
         button[count].x = x;
-        button[count].y = y;        
+        button[count].y = y;  
         button[count].xScale = 2
-        button[count].yScale = 2
-         
+        button[count].yScale = 2 
+
         --Give each a button a name
         button[count].myName = buttonImages[temp]
         button[count].number = totalButtons
@@ -148,6 +156,7 @@ for count = 1,4 do -- Number of Columns
         buttonCover[totalButtons].xScale = 2
         buttonCover[totalButtons].yScale = 2
         buttonCover[totalButtons].x = x; buttonCover[totalButtons].y = y;
+        sceneGroup:insert( buttonCover[totalButtons] )         
         totalButtons = totalButtons + 1
          
         --Attach listener event to each button
@@ -169,7 +178,7 @@ function scene:show( event )
 
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
-        Runtime.addEventListener("orientation", drawGame)
+        Runtime:addEventListener("orientation", drawGame)
 
     end
 end

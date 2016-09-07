@@ -17,6 +17,8 @@ local function drawMenu(event)
 
     -- Define local variables
     local sysOr = system.orientation
+    local themeStartMp3 = audio.loadStream("audio/Pokemon_Red_Blue_Opening_Theme_Music.mp3")
+    audio.play(themeStartMp3)
 
     if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then  
         -- Changing Object Position
@@ -32,14 +34,7 @@ local function drawMenu(event)
         backgroundImage.x = display.contentCenterX
         backgroundImage.y = display.contentCenterY
         backgroundImage.width = display.pixelWidth
-        backgroundImage.height = display.pixelHeight
-
-        -- Changing Object Orientation
-        backgroundImage.rotation = 0
-        titleImage.rotation = 0
-        title.rotation = 0
-        authors.rotation = 0
-        startButton.rotation = 0    
+        backgroundImage.height = display.pixelHeight 
 
         startButton.x = display.contentCenterX
         startButton.y = display.contentCenterY+(display.contentCenterY/1.5) 
@@ -57,14 +52,7 @@ local function drawMenu(event)
         backgroundImage.x = display.contentCenterX
         backgroundImage.y = display.contentCenterY
         backgroundImage.width = display.pixelHeight
-        backgroundImage.height = display.pixelWidth
-
-        -- Changing Object Orientation
-        backgroundImage.rotation = 0
-        titleImage.rotation = 0
-        title.rotation = 0
-        authors.rotation = 0
-        startButton.rotation = 0        
+        backgroundImage.height = display.pixelWidth 
     end
 end
 
