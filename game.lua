@@ -68,7 +68,13 @@ quitButton = widget.newButton({
 local sceneGroup = self.view
 button = {}    
 buttonCover = {}    
-buttonImages = {1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8}
+
+buttonImages = {}
+for i = 1, 151 do
+    buttonImages[i] = i
+    buttonImages[i+1] = i
+end
+
 
 local lastButton = display.newImage("images/Pokeball.png")
 lastButton.myName = 1
@@ -136,7 +142,7 @@ for count = 1,4 do -- Number of Columns
         y = y + display.contentHeight/9.0
         --Assign each image a random location on grid
         temp = math.random(1,#buttonImages)
-        button[count] = display.newImage("images/" .. buttonImages[temp] .. ".ico");     
+        button[count] = display.newImage("images/Pokemon/" .. buttonImages[temp] .. ".png");     
         sceneGroup:insert( button[count] ) 
         --Position the button   
         button[count].x = x;
