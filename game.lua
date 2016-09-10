@@ -134,13 +134,13 @@ function game(object, event)
     if(event.phase == "began") then             
         if(checkForMatch == false and secondSelect == 0) then
             --Flip over first button
-            buttonCover[object.number].isVisible = false;
+            transition.to(buttonCover[object.number], {time = 500,alpha = 0, xScale =2 , yScale = 2})
             lastButton = object
             checkForMatch = true            
         elseif(checkForMatch == true) then
             if(secondSelect == 0) then
                 --Flip over second button
-                buttonCover[object.number].isVisible = false;
+                transition.to(buttonCover[object.number], {time = 500,alpha = 0, xScale =2 , yScale = 2})
                 secondSelect = 1;
                 --If buttons do not match, flip buttons back over
                 if(lastButton.myName ~= object.myName) then
@@ -149,8 +149,8 @@ function game(object, event)
                         matchText.text = " ";
                         checkForMatch = false;
                         secondSelect = 0;
-                        buttonCover[lastButton.number].isVisible = true;
-                        buttonCover[object.number].isVisible = true;
+                        buttonCover[lastButton.number].alpha = 1
+                        buttonCover[object.number].alpha = 1
                     end, 1)                 
                 --If buttons DO match, remove buttons
                 elseif(lastButton.myName == object.myName) then
