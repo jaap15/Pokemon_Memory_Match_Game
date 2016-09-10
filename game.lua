@@ -69,12 +69,30 @@ local sceneGroup = self.view
 button = {}    
 buttonCover = {}    
 
-buttonImages = {}
+local allPokemons = {}
+
 for i = 1, 151 do
-    buttonImages[i] = i
-    buttonImages[i+1] = i
+    allPokemons[i] = i
+    print("allPokemons: " .. i)
 end
 
+buttonImages = {}
+local tmp = 1
+for i = 1, 8 do
+    selectedPokemon = math.random(1,#allPokemons)
+    print("pokemon selected: " .. selectedPokemon)
+
+    buttonImages[tmp] = selectedPokemon
+    print("index: " .. tmp .. " value: " .. selectedPokemon)
+    tmp = tmp + 1
+    buttonImages[tmp] = selectedPokemon
+    print("index: " .. tmp .. " value: " .. selectedPokemon)
+    tmp = tmp + 1
+    table.remove(allPokemons, selectedPokemon)
+end
+
+tmp = nil
+allPokemons = nil
 
 local lastButton = display.newImage("images/Pokeball.png")
 lastButton.myName = 1
@@ -147,8 +165,8 @@ for count = 1,4 do -- Number of Columns
         --Position the button   
         button[count].x = x;
         button[count].y = y;  
-        button[count].xScale = 2
-        button[count].yScale = 2 
+        button[count].xScale = 1.75
+        button[count].yScale = 1.75
 
         --Give each a button a name
         button[count].myName = buttonImages[temp]
