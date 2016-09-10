@@ -9,6 +9,8 @@ local widget = require("widget")
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
 
+sysOr = system.orientation
+
 local function QuitButtonEvent(event)
     if ("ended" == event.phase) then
         audio.stop()
@@ -62,8 +64,13 @@ quitButton = widget.newButton({
         defaultFile = "images/button.png",
         onEvent = QuitButtonEvent 
     } ) 
-    quitButton.x = display.contentCenterX
-    quitButton.y = display.contentCenterY+(display.contentCenterY/1.5)
+    if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then     
+        quitButton.x = display.contentCenterX
+        quitButton.y = display.contentCenterY+(display.contentCenterY/1.5)
+    elseif (sysOr == "landscapeRight" or sysOr == "landscapeLeft") then
+        quitButton.x = display.contentCenterX+(display.contentCenterX/1.5)
+        quitButton.y = display.contentCenterY+(display.contentCenterY/1.5)
+    end
     sceneGroup:insert(quitButton)
 
 button = {}    
@@ -149,11 +156,19 @@ end
 
 --Place buttons on screen
 for count = 1,4 do -- Number of Columns
-    x = x + display.contentWidth/5  
+    if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then     
+        x = x + display.contentWidth/5  
+    elseif (sysOr == "landscapeRight" or sysOr == "landscapeLeft") then
+        x = x + display.contentWidth/8.3  
+    end
     y = 20
      
     for insideCount = 1,4 do -- Number of Rows
+    if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then   
         y = y + display.contentHeight/9.0
+    elseif (sysOr == "landscapeRight" or sysOr == "landscapeLeft") then
+        y = y + display.contentHeight/5.0
+    end
         --Assign each image a random location on grid
         temp = math.random(1,#buttonImages)
         button[count] = display.newImage("images/Pokemon/" .. buttonImages[temp] .. ".png");     
