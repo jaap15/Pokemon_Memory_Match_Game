@@ -12,7 +12,7 @@ local widget = require("widget")
 sysOr = system.orientation
 
 local function QuitButtonEvent(event)
-    if ("ended" == event.phase) then
+    if (event.phase == "ended") then
         audio.stop()
         composer.gotoScene("menu")
     end
@@ -28,6 +28,20 @@ local function drawGame(event)
         quitButton.y = display.contentCenterY+(display.contentCenterY/1.5)
     end
 end
+
+local function exitToMenu(event)
+        audio.stop()
+        composer.gotoScene("menu")
+end
+
+local function winner_listener(self,event)
+    if (winCount == 8) then
+        native.showAlert("Winner!", "Congratulations", {"Exit to Menu"}, exitToMenu)
+        Runtime:removeEventListener("enterFrame", winner_listener)
+    end
+end
+
+
 
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
@@ -52,6 +66,7 @@ local totalButtons = 0
 
 local secondSelect = 0
 local checkForMatch = false
+
 
 x = -20
 
@@ -113,6 +128,7 @@ matchText.x = display.contentCenterX
 matchText.y = display.contentCenterY-(display.contentCenterY*0.88)
 sceneGroup:insert( matchText )
 
+winCount = 0
 --Set up game function
 function game(object, event)
     if(event.phase == "began") then             
@@ -143,6 +159,7 @@ function game(object, event)
                         matchText.text = " ";
                         checkForMatch = false;
                         secondSelect = 0;
+                        winCount = winCount + 1
                         lastButton:removeSelf();
                         object:removeSelf();
                         buttonCover[lastButton.number]:removeSelf();
@@ -201,7 +218,6 @@ for count = 1,4 do -- Number of Columns
 end
 end
 
-
 -- show()
 function scene:show( event )
 
@@ -214,10 +230,11 @@ function scene:show( event )
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
         Runtime:addEventListener("orientation", drawGame)
+        Runtime:addEventListener("enterFrame", winner_listener)
+
 
     end
 end
-
 
 -- hide()
 function scene:hide( event )
