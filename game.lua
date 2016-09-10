@@ -14,6 +14,8 @@ sysOr = system.orientation
 local function QuitButtonEvent(event)
     if (event.phase == "ended") then
         audio.stop()
+        Runtime:removeEventListener("enterFrame", winner_listener)
+        Runtime:removeEventListener("enterFrame", gameTimer)
         composer.gotoScene("menu")
     end
 end    
@@ -38,6 +40,7 @@ local function winner_listener(self,event)
     if (winCount == 8) then
         native.showAlert("Winner!", "Congratulations", {"Exit to Menu"}, exitToMenu)
         Runtime:removeEventListener("enterFrame", winner_listener)
+        Runtime:removeEventListener("enterFrame", gameTimer)
     end
 end
 
@@ -115,6 +118,15 @@ allPokemons = nil
 local lastButton = display.newImage("images/Pokeball.png")
 lastButton.myName = 1
 sceneGroup:insert( lastButton )
+
+timerText = display.newText("Time: ", 0, 0, native.systemFont)
+timerText:setTextColor(235, 235, 235)
+timerText.x = display.contentCenterX
+timerText.y = display.contentCenterY+(display.contentCenterY*0.5)
+function displayTime(event)
+    timerText.text = "Time: " .. os.time()-t
+end
+sceneGroup:insert( timerText )
 
 --Set up simple off-white background
 local myRectangle = display.newRect(0, 0, _W, _H)
@@ -226,12 +238,13 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Code here runs when the scene is still off screen (but is about to come on screen)
+    t = os.time()
 
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
         Runtime:addEventListener("orientation", drawGame)
         Runtime:addEventListener("enterFrame", winner_listener)
-
+        timer.performWithDelay(1000, displayTime, 0)
 
     end
 end
