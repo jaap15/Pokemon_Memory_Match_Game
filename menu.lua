@@ -8,7 +8,7 @@ local widget = require("widget")
 -- -----------------------------------------------------------------------------------
 local function startButtonEvent(event)
 	if ("ended" == event.phase) then
-        audio.fadeOut(themeStartMp3)
+        audio.stop()
 		composer.gotoScene("game")
 	end
 end
@@ -17,8 +17,6 @@ local function drawMenu(event)
 
     -- Define local variables
     local sysOr = system.orientation
-    local themeStartMp3 = audio.loadStream("audio/Pokemon_Red_Blue_Opening_Theme_Music.mp3")
-    audio.play(themeStartMp3)
 
     if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then  
         -- Changing Object Position
@@ -66,9 +64,9 @@ function scene:create( event )
 
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
-    --local themeStartMp3 = audio.loadStream("audio/Pokemon_Red_Blue_Opening_Theme_Music.mp3")
-    --audio.play(themeStartMp3)
-    sceneGroup = self.view
+
+    local themeStartMp3 = audio.loadStream("audio/Pokemon_Red_Blue_Opening_Theme_Music.mp3")
+    audio.play(themeStartMp3, {loops = -1})
 
     -- Objects to be added to the scene
     backgroundImage = display.newImage("images/backdrop.jpg", display.contentCenterX, display.contentCenterY)
@@ -133,10 +131,9 @@ function scene:hide( event )
 
     if ( phase == "will" ) then
         -- Code here runs when the scene is on screen (but is about to go off screen)
-
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
-
+        composer.removeScene( "menu")
     end
 end
 

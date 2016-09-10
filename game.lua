@@ -11,6 +11,7 @@ local widget = require("widget")
 
 local function QuitButtonEvent(event)
     if ("ended" == event.phase) then
+        audio.stop()
         composer.gotoScene("menu")
     end
 end    
@@ -33,11 +34,11 @@ end
 -- create()
 function scene:create( event )
 
-    sceneGroup = self.view
+    local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
 
     local themeBattleMp3 = audio.loadStream("audio/Pokemon_Red_Battle_Music.mp3")
-    audio.play(themeBattleMp3)
+    audio.play(themeBattleMp3, {loops = -1})
 
 
 display.setStatusBar(display.HiddenStatusBar);
@@ -65,7 +66,6 @@ quitButton = widget.newButton({
     quitButton.y = display.contentCenterY+(display.contentCenterY/1.5)
     sceneGroup:insert(quitButton)
 
-local sceneGroup = self.view
 button = {}    
 buttonCover = {}    
 
@@ -73,20 +73,16 @@ local allPokemons = {}
 
 for i = 1, 151 do
     allPokemons[i] = i
-    print("allPokemons: " .. i)
 end
 
 buttonImages = {}
 local tmp = 1
 for i = 1, 8 do
     selectedPokemon = math.random(1,#allPokemons)
-    print("pokemon selected: " .. selectedPokemon)
 
     buttonImages[tmp] = selectedPokemon
-    print("index: " .. tmp .. " value: " .. selectedPokemon)
     tmp = tmp + 1
     buttonImages[tmp] = selectedPokemon
-    print("index: " .. tmp .. " value: " .. selectedPokemon)
     tmp = tmp + 1
     table.remove(allPokemons, selectedPokemon)
 end
@@ -216,9 +212,9 @@ function scene:hide( event )
 
     if ( phase == "will" ) then
         -- Code here runs when the scene is on screen (but is about to go off screen)
-
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
+        composer.removeScene( "game")
 
     end
 end
