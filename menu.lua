@@ -49,8 +49,8 @@ local function drawMenu(event)
         
         backgroundImage.x = display.contentCenterX
         backgroundImage.y = display.contentCenterY
-        backgroundImage.width = display.pixelHeight
-        backgroundImage.height = display.pixelWidth 
+        backgroundImage.width = display.pixelWidth
+        backgroundImage.height = display.pixelHeight 
     end
 end
 
@@ -72,7 +72,7 @@ function scene:create( event )
     backgroundImage = display.newImage("images/backdrop.jpg", display.contentCenterX, display.contentCenterY)
     titleImage = display.newImage("images/Pokemon_logo.png", display.contentCenterX, display.contentCenterY-(display.contentCenterY/1.3))
     title = display.newText("Match Game", display.contentCenterX, display.contentCenterY-(display.contentCenterY/1.75))
-    authors = display.newText("by Daniel and Jairo", display.contentCenterX, display.contentCenterY+(display.contentCenterY/1.2))
+    authors = display.newText("by Daniel Burris and Jairo Arreola", display.contentCenterX, display.contentCenterY+(display.contentCenterY/1.2))
     startButton = widget.newButton({    
             id = "startButton",
             label = "Start",    
@@ -101,8 +101,6 @@ function scene:create( event )
     sceneGroup:insert( titleImage )
     sceneGroup:insert( authors )
     sceneGroup:insert(startButton)  
-
-
 end
 
 

@@ -25,9 +25,13 @@ local function drawGame(event)
     if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then          
         quitButton.x = display.contentCenterX
         quitButton.y = display.contentCenterY+(display.contentCenterY/1.5)
+        timerText.x = display.contentCenterX     
+        timerText.y = display.contentCenterY+(display.contentCenterY*0.5)
     elseif (sysOr == "landscapeRight" or sysOr == "landscapeLeft") then
         quitButton.x = display.contentCenterX+(display.contentCenterX/1.5)
         quitButton.y = display.contentCenterY+(display.contentCenterY/1.5)
+        timerText.x = display.contentCenterX+(display.contentCenterX/1.5)    
+        timerText.y = display.contentCenterY+(display.contentCenterY/2.5)
     end
 end
 
@@ -121,8 +125,14 @@ sceneGroup:insert( lastButton )
 
 timerText = display.newText("Time: ", 0, 0, native.systemFont)
 timerText:setTextColor(235, 235, 235)
-timerText.x = display.contentCenterX
-timerText.y = display.contentCenterY+(display.contentCenterY*0.5)
+
+if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then   
+    timerText.x = display.contentCenterX     
+    timerText.y = display.contentCenterY+(display.contentCenterY*0.5)
+elseif (sysOr == "landscapeRight" or sysOr == "landscapeLeft") then
+    timerText.x = display.contentCenterX+(display.contentCenterX/1.5)    
+    timerText.y = display.contentCenterY+(display.contentCenterY/2.5)
+end
 function displayTime(event)
     timerText.text = "Time: " .. os.time()-t
 end
