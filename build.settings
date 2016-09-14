@@ -60,9 +60,12 @@ settings =
 	--
 	android =
 	{
-		usesPermissions =
-		{
-			"android.permission.INTERNET",
-		},
+		supportsScreens =
+        {
+            smallScreens  = true,
+            normalScreens = true,
+            largeScreens  = true,
+            xlargeScreens = true,
+        },
 	},
 }

@@ -11,6 +11,10 @@ local widget = require("widget")
 
 sysOr = system.orientation
 
+-- -----------------------------------------------------------------------------------
+-- quizButtonEvent()
+-- This function stops the enterFrame listeners and switches us back to the menu scene
+-- -----------------------------------------------------------------------------------
 local function QuitButtonEvent(event)
     if (event.phase == "ended") then
         audio.stop()
@@ -20,6 +24,10 @@ local function QuitButtonEvent(event)
     end
 end    
 
+-- -----------------------------------------------------------------------------------
+-- drawGame()
+-- This function draws the game based on what orientation the phone is
+-- -----------------------------------------------------------------------------------
 local function drawGame(event)    
     local sysOr = system.orientation
     if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then          
@@ -35,11 +43,20 @@ local function drawGame(event)
     end
 end
 
+-- -----------------------------------------------------------------------------------
+-- exitToMenu()
+-- This function stops the music and returns to menu scene
+-- -----------------------------------------------------------------------------------
 local function exitToMenu(event)
         audio.stop()
         composer.gotoScene("menu")
 end
 
+-- -----------------------------------------------------------------------------------
+-- winner_listener()
+-- This function is called every second and checks to see if all boxes have been checked off
+-- If they have, an alert is called and congratulates the player for winning
+-- -----------------------------------------------------------------------------------
 local function winner_listener(self,event)
     if (winCount == 8) then
         native.showAlert("Winner!", "Congratulations", {"Exit to Menu"}, exitToMenu)
@@ -54,18 +71,26 @@ end
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
 
+-- -----------------------------------------------------------------------------------
 -- create()
+-- This function is the heart of our application, it creates the entire game scene,
+-- the buttons, buttuonCovers, quit button, and timer object. It has a functioned
+-- defining in it that defines the rules of the matchimg game and calls this function 
+-- when a buttonCover is touched. 
+-- -----------------------------------------------------------------------------------
 function scene:create( event )
 
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
 
+    -- Loading and playing the music for game scene
     local themeBattleMp3 = audio.loadStream("audio/Pokemon_Red_Battle_Music.mp3")
     audio.play(themeBattleMp3, {loops = -1})
 
 
 display.setStatusBar(display.HiddenStatusBar);
 
+-- Defining height and width of scene
 _W = display.contentWidth;
 _H = display.contentHeight;
 
@@ -77,6 +102,7 @@ local checkForMatch = false
 
 x = -20
 
+-- Defining the quit button widget
 quitButton = widget.newButton({   
         id = "quitButton",
         label = "Quit",
@@ -86,24 +112,30 @@ quitButton = widget.newButton({
         defaultFile = "images/button.png",
         onEvent = QuitButtonEvent 
     } ) 
-    if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then     
-        quitButton.x = display.contentCenterX
-        quitButton.y = display.contentCenterY+(display.contentCenterY/1.5)
-    elseif (sysOr == "landscapeRight" or sysOr == "landscapeLeft") then
-        quitButton.x = display.contentCenterX+(display.contentCenterX/1.5)
-        quitButton.y = display.contentCenterY+(display.contentCenterY/1.5)
-    end
-    sceneGroup:insert(quitButton)
 
+-- Positioning the quit button
+if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then     
+    quitButton.x = display.contentCenterX
+    quitButton.y = display.contentCenterY+(display.contentCenterY/1.5)
+elseif (sysOr == "landscapeRight" or sysOr == "landscapeLeft") then
+    quitButton.x = display.contentCenterX+(display.contentCenterX/1.5)
+    quitButton.y = display.contentCenterY+(display.contentCenterY/1.5)
+end
+sceneGroup:insert(quitButton)
+
+-- Array of buttons, and buttonCovers
 button = {}    
 buttonCover = {}    
 
+-- Array of pokemon images
 local allPokemons = {}
 
+-- Adding all pokemon to array
 for i = 1, 151 do
     allPokemons[i] = i
 end
 
+-- Randomizing what pokemon will be used for the matching game
 buttonImages = {}
 local tmp = 1
 for i = 1, 8 do
@@ -115,7 +147,7 @@ for i = 1, 8 do
     tmp = tmp + 1
     table.remove(allPokemons, selectedPokemon)
 end
-
+ 
 tmp = nil
 allPokemons = nil
 
@@ -123,9 +155,11 @@ local lastButton = display.newImage("images/Pokeball.png")
 lastButton.myName = 1
 sceneGroup:insert( lastButton )
 
+-- Game Timer
 timerText = display.newText("Time: ", 0, 0, native.systemFont)
 timerText:setTextColor(235, 235, 235)
 
+-- Positioning the timer object
 if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then   
     timerText.x = display.contentCenterX     
     timerText.y = display.contentCenterY+(display.contentCenterY*0.5)
@@ -138,7 +172,7 @@ function displayTime(event)
 end
 sceneGroup:insert( timerText )
 
---Set up simple off-white background
+--Set up simple black background
 local myRectangle = display.newRect(0, 0, _W, _H)
 myRectangle:setFillColor(0, 0, 0)
 sceneGroup:insert( myRectangle )
@@ -150,8 +184,14 @@ matchText.x = display.contentCenterX
 matchText.y = display.contentCenterY-(display.contentCenterY*0.88)
 sceneGroup:insert( matchText )
 
+-- This variable is used to track whether the player has made 8 matches yet
 winCount = 0
---Set up game function
+-- -----------------------------------------------------------------------------------
+-- game(object, event)
+-- This functions checks to see if button flips match each other or don't match each 
+-- other, it will leave the buttons on the screen if they don't match, it will 
+-- remove them if they do match
+-- -----------------------------------------------------------------------------------
 function game(object, event)
     if(event.phase == "began") then             
         if(checkForMatch == false and secondSelect == 0) then
@@ -195,6 +235,7 @@ end
 
 --Place buttons on screen
 for count = 1,4 do -- Number of Columns
+    -- Define offsets for button's X positions
     if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then     
         x = x + display.contentWidth/5  
     elseif (sysOr == "landscapeRight" or sysOr == "landscapeLeft") then
@@ -203,6 +244,8 @@ for count = 1,4 do -- Number of Columns
     y = 20
      
     for insideCount = 1,4 do -- Number of Rows
+
+    -- Define the offsets for the button's y positions
     if (sysOr == "portrait" or sysOr == "portraitUpsideDown") then   
         y = y + display.contentHeight/9.0
     elseif (sysOr == "landscapeRight" or sysOr == "landscapeLeft") then
@@ -240,7 +283,11 @@ for count = 1,4 do -- Number of Columns
 end
 end
 
--- show()
+-- -----------------------------------------------------------------------------------
+-- scene:show(event)
+-- This function adds event listeners that watch for screen orientation change
+-- and one that executes every second
+-- -----------------------------------------------------------------------------------
 function scene:show( event )
 
     local sceneGroup = self.view
@@ -259,7 +306,10 @@ function scene:show( event )
     end
 end
 
--- hide()
+-- -----------------------------------------------------------------------------------
+-- scene:hide(event) 
+-- This function removes the scene when we swtich scenes
+-- -----------------------------------------------------------------------------------
 function scene:hide( event )
 
     local sceneGroup = self.view
@@ -275,7 +325,9 @@ function scene:hide( event )
 end
 
 
--- destroy()
+-- -----------------------------------------------------------------------------------
+-- scene:destroy(event)
+-- -----------------------------------------------------------------------------------
 function scene:destroy( event )
 
     local sceneGroup = self.view
